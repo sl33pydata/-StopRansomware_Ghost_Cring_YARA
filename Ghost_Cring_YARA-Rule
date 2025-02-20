@@ -1,0 +1,47 @@
+rule Ghost_Cring_Ransomware {
+    meta:
+        description = "Detects Ghost (Cring) ransomware based on known IOCs"
+        author = "sl33pydata"
+        date = "2025-02-20"
+        reference = "https://www.cisa.gov/news-events/cybersecurity-advisories/aa25-050a"
+    strings:
+        // File names
+        $fn1 = "sock.txt"
+        $fn2 = "isx.txt"
+        $fn3 = "main.txt"
+        $fn4 = "sp.txt"
+        $fn5 = "x86.log"
+        $fn6 = "Locker.exe"
+        $fn7 = "ElysiumO.exe"
+        $fn8 = "Ghost.exe"
+        $fn9 = "pro.txt"
+        $fn10 = "iex.exe"
+        $fn11 = "iex.txt"
+        $fn12 = "Cring.exe"
+
+        // MD5 hashes
+        $md5_1 = "db38ef2e3d4d8cb785df48f458b35090" // sock.txt
+        $md5_2 = "625bd7275e1892eac50a22f8b4a6355d" // isx.txt
+        $md5_3 = "a2fd181f57548c215ac6891d000ec6b9" // main.txt
+        $md5_4 = "ff52fdf84448277b1bc121f592f753c5" // sp.txt
+        $md5_5 = "c3b8f6d102393b4542e9f951c9435255" // x86.log
+        $md5_6 = "ef6a213f59f3fbee2894bd6734bbaed2" // Locker.exe
+        $md5_7 = "d1c5e7b8e937625891707f8b4b594314" // ElysiumO.exe
+        $md5_8 = "c9e35b5c1dc8856da25965b385a26ec4" // ElysiumO.exe
+        $md5_9 = "29e44e8994197bdb0c2be6fc5dfc15c2" // ElysiumO.exe
+        $md5_10 = "d9c019182d88290e5489cdf3b607f982" // Ghost.exe
+        $md5_11 = "34b3009590ec2d361f07cac320671410" // Ghost.exe
+        $md5_12 = "ac58a214ce7deb3a578c10b97f93d9c3" // pro.txt; iex.exe; iex.txt
+        $md5_13 = "c5d712f82d5d37bb284acd4468ab3533" // Cring.exe
+
+        // URL
+        $url1 = "rejitto.com/hfs"
+
+    condition:
+        uint16(0) == 0x5A4D and
+        (
+            any of ($fn*) or
+            any of ($md5_*) or
+            $url1
+        )
+}
